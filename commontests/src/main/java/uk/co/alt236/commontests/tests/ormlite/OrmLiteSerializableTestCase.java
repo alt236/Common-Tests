@@ -2,6 +2,9 @@ package uk.co.alt236.commontests.tests.ormlite;
 
 import android.test.AndroidTestCase;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
