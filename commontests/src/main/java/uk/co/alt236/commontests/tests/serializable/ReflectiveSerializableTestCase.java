@@ -2,6 +2,8 @@ package uk.co.alt236.commontests.tests.serializable;
 
 import android.test.AndroidTestCase;
 
+import com.cedarsoftware.util.DeepEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
