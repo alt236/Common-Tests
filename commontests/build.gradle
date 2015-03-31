@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    compile 'com.cedarsoftware:java-util:1.18.1'
     provided files('libs/ormlite-android-4.48.jar')
     provided files('libs/ormlite-core-4.48.jar')
 }

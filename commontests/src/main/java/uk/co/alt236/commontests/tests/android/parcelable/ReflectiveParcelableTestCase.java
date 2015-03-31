@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.test.AndroidTestCase;
 
+import com.cedarsoftware.util.DeepEquals;
+
 import uk.co.alt236.commontests.util.ReflectionTestUtils;
 
 /**
