@@ -15,7 +15,7 @@ public abstract class AbstractReflectiveTestCaseBuilder {
     }
 
     protected Collection<String> getClassNames() {
-        return classFilter.getClassNames();
+        return classFilter.getFilteredClassNames();
     }
 
 }

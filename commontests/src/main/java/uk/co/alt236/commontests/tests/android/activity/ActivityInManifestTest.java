@@ -12,7 +12,7 @@ public class ActivityInManifestTest extends AbstractReflectiveTestCase {
     private final Class<?> clazz;
     private final Set<String> foundNames;
 
-    public ActivityInManifestTest(final Class clazz, final Set<String> foundNames) {
+    protected ActivityInManifestTest(final Class clazz, final Set<String> foundNames) {
         setName("testReflectively");
         this.clazz = clazz;
         this.foundNames = foundNames;

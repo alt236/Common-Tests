@@ -9,7 +9,7 @@ public class ActivityInCode extends AbstractReflectiveTestCase {
 
     private final String activityName;
 
-    public ActivityInCode(final String activityName) {
+    protected ActivityInCode(final String activityName) {
         setName("testReflectively");
         this.activityName = activityName;
     }
