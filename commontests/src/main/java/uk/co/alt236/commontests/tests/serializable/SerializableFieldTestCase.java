@@ -64,7 +64,7 @@ public class SerializableFieldTestCase extends AndroidTestCase {
 
     private static void test(final Class<?> originalClass, final Class<?> clazz) {
         if (!SerializationUtils.isSerializable(clazz)) {
-            throw new IllegalArgumentException("Class '" + clazz.getName() + "' is not Serializable!");
+            fail("Class '" + clazz.getName() + "' is not Serializable!");
         }
 
         final Field[] fields = clazz.getDeclaredFields();
@@ -72,7 +72,7 @@ public class SerializableFieldTestCase extends AndroidTestCase {
         for (final Field field : fields) {
             if (!isSkippable(field)) {
                 if (!SerializationUtils.isSerializable(field.getType())) {
-                    throw new IllegalArgumentException(getErrorMessage(originalClass, clazz, field));
+                    fail(getErrorMessage(originalClass, clazz, field));
                 } else {
                     test(originalClass, field.getType());
                 }

@@ -46,7 +46,7 @@ public class OrmLiteSerializableTestCase extends AndroidTestCase {
                                         + "' is marked to be stored as Serializable"
                                         + " in '" + originalClassName + "' but does not implement Serializable!";
 
-                                throw new IllegalArgumentException(message);
+                                fail(message);
                             }
                         }
                     }
