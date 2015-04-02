@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import uk.co.alt236.commontests.util.InstatiationException;
 import uk.co.alt236.commontests.util.filter.ClassFilter;
 
 /**
@@ -27,8 +28,9 @@ public abstract class AbstractReflectiveTestCaseBuilder {
                 if (isApplicable(clazz)) {
                     methodResult.add(clazz);
                 }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            } catch (final Exception e) {
+                final String message = "Error while trying to instantiate '" +clazzName+ "'";
+                throw new InstatiationException(message, e);
             }
         }
 

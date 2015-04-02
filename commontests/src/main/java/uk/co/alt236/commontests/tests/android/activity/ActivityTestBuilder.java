@@ -24,7 +24,7 @@ public class ActivityTestBuilder extends AbstractReflectiveTestCaseBuilder {
         super(classFilter);
     }
 
-    public TestSuite getTests(final Context context) throws Exception{
+    public TestSuite getTests(final Context context) {
         final TestSuite selectedTests = new TestSuite();
         final List<Class<?>> listOfClasses = getApplicableClasses();
         final Set<String> manifestActivities = getAllManifestActivities(context, context.getPackageName());
@@ -40,12 +40,20 @@ public class ActivityTestBuilder extends AbstractReflectiveTestCaseBuilder {
         return selectedTests;
     }
 
-    private static Set<String> getAllManifestActivities(Context context, String packageName) throws PackageManager.NameNotFoundException {
+    private static Set<String> getAllManifestActivities(Context context, String packageName) {
         final Set<String> result = new TreeSet<String>();
 
-        final ActivityInfo[] list = context.getPackageManager().getPackageInfo(
-                packageName,
-                PackageManager.GET_ACTIVITIES).activities;
+        ActivityInfo[] list;
+        try {
+            list = context.getPackageManager().getPackageInfo(
+                    packageName,
+                    PackageManager.GET_ACTIVITIES).activities;
+
+        } catch (final PackageManager.NameNotFoundException e){
+            // Should never happen
+            e.printStackTrace();
+            list = null;
+        }
 
         for (final ActivityInfo info : list) {
             result.add(info.name);
@@ -71,6 +79,6 @@ public class ActivityTestBuilder extends AbstractReflectiveTestCaseBuilder {
     }
 
     protected boolean isApplicable(Class<?> clazz) {
-        return !Modifier.isAbstract(clazz.getModifiers()) && isActivity(clazz);
+        return isActivity(clazz) && !Modifier.isAbstract(clazz.getModifiers());
     }
 }

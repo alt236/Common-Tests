@@ -14,8 +14,16 @@ public class SimpleClassFilter implements ClassFilter{
     private final Set<String> mClassBlacklist = new HashSet<>();
     private final Set<String> mClassNames = new HashSet<>();
 
-    public void addClass(final String className){
-        mClassNames.add(className);
+    public SimpleClassFilter(){
+        // NOTHING;
+    }
+
+    public SimpleClassFilter(final Collection<String> classes){
+        addClasses(classes);
+    }
+
+    public void addClass(final String classes){
+        mClassNames.add(classes);
     }
 
     public void addClasses(final Collection<String> className){
