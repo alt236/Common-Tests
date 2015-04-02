@@ -1,7 +1,5 @@
 package uk.co.alt236.commontests.util.filter;
 
-import android.util.Log;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +8,8 @@ import java.util.Set;
  * Created by alexandros on 01/04/2015.
  */
 public class SimpleClassFilter implements ClassFilter{
-    private final Set<String> mPackageNamePrefix = new HashSet<>();
+    private final Set<String> mPackagePrefixWhitelist = new HashSet<>();
+    private final Set<String> mPackagePrefixBlacklist = new HashSet<>();
     private final Set<String> mClassBlacklist = new HashSet<>();
     private final Set<String> mClassNames = new HashSet<>();
 
@@ -31,33 +30,48 @@ public class SimpleClassFilter implements ClassFilter{
     }
 
     @Override
-    public void addPackagePrefixFilter(final String prefix) {
-        mPackageNamePrefix.add(prefix);
+    public void addPackagePrefixWhitelist(final String prefix) {
+        mPackagePrefixWhitelist.add(prefix);
     }
 
     @Override
-    public void addToBlacklist(final String className) {
+    public void addPackagePrefixBlacklist(final String prefix) {
+        mPackagePrefixBlacklist.add(prefix);
+    }
+
+    @Override
+    public void addToClassBlacklist(final String className) {
         mClassBlacklist.add(className);
     }
 
     @Override
-    public void clearBlacklist() {
+    public void clearClassBlacklist() {
         mClassBlacklist.clear();
     }
 
     @Override
-    public void clearPackagePrefixFilter() {
-        mPackageNamePrefix.clear();
+    public void clearPackagePrefixWhitelist() {
+        mPackagePrefixWhitelist.clear();
     }
 
     @Override
-    public int getBlacklistSize(){
+    public void clearPackagePrefixBlacklist() {
+        mPackagePrefixBlacklist.clear();
+    }
+
+    @Override
+    public int getClassBlacklistSize(){
         return mClassBlacklist.size();
     }
 
     @Override
-    public int getPackagePrefixFilterSize(){
-        return mPackageNamePrefix.size();
+    public int getPackagePrefixWhitelistSize(){
+        return mPackagePrefixWhitelist.size();
+    }
+
+    @Override
+    public int getPackagePrefixBlacklistSize(){
+        return mPackagePrefixBlacklist.size();
     }
 
     @Override
@@ -65,7 +79,9 @@ public class SimpleClassFilter implements ClassFilter{
         final Collection<String> methodResult = new HashSet<>();
 
         for(final String className : mClassNames){
-            if (isFromValidPackage(className) && !isBlackListed(className)) {
+            if (isPackageWhitelisted(className)
+                    && !isPackageBlacklisted(className)
+                    && !isClassBlackListed(className)) {
                 methodResult.add(className);
             }
         }
@@ -73,16 +89,28 @@ public class SimpleClassFilter implements ClassFilter{
         return methodResult;
     }
 
-    private boolean isBlackListed(final String className) {
+    private boolean isClassBlackListed(final String className) {
         if(mClassBlacklist.isEmpty()){return false;}
 
         return mClassBlacklist.contains(className);
     }
 
-    private boolean isFromValidPackage(final String className) {
-        if(mPackageNamePrefix.isEmpty()){return true;}
+    private boolean isPackageWhitelisted(final String className) {
+        if(mPackagePrefixWhitelist.isEmpty()){return true;}
 
-        for (final String prefix : mPackageNamePrefix) {
+        for (final String prefix : mPackagePrefixWhitelist) {
+            if (className.startsWith(prefix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isPackageBlacklisted(final String className) {
+        if(mPackagePrefixBlacklist.isEmpty()){return false;}
+
+        for (final String prefix : mPackagePrefixBlacklist) {
             if (className.startsWith(prefix)) {
                 return true;
             }

@@ -6,17 +6,23 @@ import java.util.Collection;
  * Created by alexandros on 31/03/2015.
  */
 public interface ClassFilter {
-    public void addPackagePrefixFilter(final String prefix);
+    public void addPackagePrefixWhitelist(final String prefix);
 
-    public void addToBlacklist(final String className);
+    public void addPackagePrefixBlacklist(final String prefix);
 
-    public void clearBlacklist();
+    public void addToClassBlacklist(final String className);
 
-    public void clearPackagePrefixFilter();
+    public void clearClassBlacklist();
 
-    public int getBlacklistSize();
+    public void clearPackagePrefixWhitelist();
 
-    public int getPackagePrefixFilterSize();
+    public void clearPackagePrefixBlacklist();
+
+    public int getClassBlacklistSize();
+
+    public int getPackagePrefixWhitelistSize();
+
+    public int getPackagePrefixBlacklistSize();
 
     public Collection<String> getFilteredClassNames();
 }

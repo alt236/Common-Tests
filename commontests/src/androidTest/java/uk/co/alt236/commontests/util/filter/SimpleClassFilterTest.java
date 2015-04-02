@@ -12,14 +12,80 @@ public class SimpleClassFilterTest extends TestCase {
         filter.addClass(className);
         assertEquals(1, filter.getFilteredClassNames().size());
 
-        filter.addToBlacklist(className);
+        filter.addToClassBlacklist(className);
         assertEquals(0, filter.getFilteredClassNames().size());
 
-        filter.clearBlacklist();
+        filter.clearClassBlacklist();
         assertEquals(1, filter.getFilteredClassNames().size());
     }
 
-    public void testPrefixFilter() throws Exception {
+    public void testGetBlacklistSize() throws Exception {
+        final SimpleClassFilter filter = new SimpleClassFilter();
+        assertEquals(0, filter.getClassBlacklistSize());
+
+        filter.addToClassBlacklist("com.test");
+        assertEquals(1, filter.getClassBlacklistSize());
+
+        filter.addToClassBlacklist("com.test1");
+        assertEquals(2, filter.getClassBlacklistSize());
+
+        filter.clearClassBlacklist();
+        assertEquals(0, filter.getClassBlacklistSize());
+    }
+
+    public void testGetPackagePrefixWhitelistSize() throws Exception {
+        final SimpleClassFilter filter = new SimpleClassFilter();
+        assertEquals(0, filter.getPackagePrefixWhitelistSize());
+
+        filter.addPackagePrefixWhitelist("com.test");
+        assertEquals(1, filter.getPackagePrefixWhitelistSize());
+
+        filter.addPackagePrefixWhitelist("com.test1");
+        assertEquals(2, filter.getPackagePrefixWhitelistSize());
+
+        filter.clearPackagePrefixWhitelist();
+        assertEquals(0, filter.getPackagePrefixWhitelistSize());
+    }
+
+    public void testGetPackagePrefixBlacklistSize() throws Exception {
+        final SimpleClassFilter filter = new SimpleClassFilter();
+        assertEquals(0, filter.getPackagePrefixBlacklistSize());
+
+        filter.addPackagePrefixBlacklist("com.test");
+        assertEquals(1, filter.getPackagePrefixBlacklistSize());
+
+        filter.addPackagePrefixBlacklist("com.test1");
+        assertEquals(2, filter.getPackagePrefixBlacklistSize());
+
+        filter.clearPackagePrefixBlacklist();
+        assertEquals(0, filter.getPackagePrefixBlacklistSize());
+    }
+
+    public void testPrefixWhitelist() throws Exception {
+        final String classPrefixValid = "com.sample.";
+        final String classPrefixInvalid = "com.sample2.";
+        final String className = classPrefixValid + "example.Class";
+
+        final SimpleClassFilter filter = new SimpleClassFilter();
+        assertEquals(0, filter.getFilteredClassNames().size());
+
+        filter.addClass(className);
+        assertEquals(1, filter.getFilteredClassNames().size());
+
+        filter.addPackagePrefixWhitelist(classPrefixValid);
+        assertEquals(1, filter.getFilteredClassNames().size());
+
+        filter.clearPackagePrefixWhitelist();
+        assertEquals(1, filter.getFilteredClassNames().size());
+
+        filter.addPackagePrefixWhitelist(classPrefixInvalid);
+        assertEquals(0, filter.getFilteredClassNames().size());
+
+        filter.addPackagePrefixWhitelist(classPrefixValid);
+        assertEquals(1, filter.getFilteredClassNames().size());
+    }
+
+    public void testPrefixBlacklist() throws Exception {
         final String classPrefixValid = "com.sample.";
         final String classPrefixInValid = "com.sample2.";
         final String className = classPrefixValid + "example.Class";
@@ -30,44 +96,16 @@ public class SimpleClassFilterTest extends TestCase {
         filter.addClass(className);
         assertEquals(1, filter.getFilteredClassNames().size());
 
-        filter.addPackagePrefixFilter(classPrefixValid);
-        assertEquals(1, filter.getFilteredClassNames().size());
-
-        filter.clearPackagePrefixFilter();
-        assertEquals(1, filter.getFilteredClassNames().size());
-
-        filter.addPackagePrefixFilter(classPrefixInValid);
+        filter.addPackagePrefixBlacklist(classPrefixValid);
         assertEquals(0, filter.getFilteredClassNames().size());
 
-        filter.addPackagePrefixFilter(classPrefixValid);
+        filter.clearPackagePrefixBlacklist();
         assertEquals(1, filter.getFilteredClassNames().size());
-    }
 
-    public void testGetBlacklistSize() throws Exception {
-        final SimpleClassFilter filter = new SimpleClassFilter();
-        assertEquals(0, filter.getBlacklistSize());
+        filter.addPackagePrefixBlacklist(classPrefixInValid);
+        assertEquals(1, filter.getFilteredClassNames().size());
 
-        filter.addToBlacklist("com.test");
-        assertEquals(1, filter.getBlacklistSize());
-
-        filter.addToBlacklist("com.test1");
-        assertEquals(2, filter.getBlacklistSize());
-
-        filter.clearBlacklist();
-        assertEquals(0, filter.getBlacklistSize());
-    }
-
-    public void testGetPackagePrefixFilterSize() throws Exception {
-        final SimpleClassFilter filter = new SimpleClassFilter();
-        assertEquals(0, filter.getPackagePrefixFilterSize());
-
-        filter.addPackagePrefixFilter("com.test");
-        assertEquals(1, filter.getPackagePrefixFilterSize());
-
-        filter.addPackagePrefixFilter("com.test1");
-        assertEquals(2, filter.getPackagePrefixFilterSize());
-
-        filter.clearPackagePrefixFilter();
-        assertEquals(0, filter.getPackagePrefixFilterSize());
+        filter.addPackagePrefixBlacklist(classPrefixValid);
+        assertEquals(0, filter.getFilteredClassNames().size());
     }
 }
