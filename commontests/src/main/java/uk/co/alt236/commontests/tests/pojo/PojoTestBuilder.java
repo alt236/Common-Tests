@@ -1,13 +1,10 @@
 package uk.co.alt236.commontests.tests.pojo;
 
-import android.content.Context;
-
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import uk.co.alt236.commontests.util.ReflectionTestUtils;
@@ -24,29 +21,9 @@ public class PojoTestBuilder extends AbstractReflectiveTestCaseBuilder {
         super(classFilter);
     }
 
-    private List<Class<?>> getAllRelevantClasses(Context context) {
-        final Collection<String> classes = getClassNames();
-        final List<Class<?>> methodResult = new ArrayList<Class<?>>();
-
-        for (final String clazzName : classes) {
-                final Class<?> clazz;
-                try {
-                    clazz = Class.forName(clazzName);
-                    if (isApplicable(clazz)) {
-                        methodResult.add(clazz);
-
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        return methodResult;
-    }
-
-    public TestSuite getTests(final Context context) {
+    public TestSuite getTests() {
         final TestSuite selectedTests = new TestSuite();
-        final List<Class<?>> listOfClasses = getAllRelevantClasses(context);
+        final List<Class<?>> listOfClasses = getApplicableClasses();
         final List<TestCase> stringTests = new ArrayList<TestCase>();
         final List<TestCase> hashCodeTests = new ArrayList<TestCase>();
         final List<TestCase> equalsTests = new ArrayList<TestCase>();
@@ -64,7 +41,7 @@ public class PojoTestBuilder extends AbstractReflectiveTestCaseBuilder {
         return selectedTests;
     }
 
-    private boolean isApplicable(final Class<?> clazz) {
+    protected boolean isApplicable(final Class<?> clazz) {
         if (Modifier.isAbstract(clazz.getModifiers())) {
             return false;
         }

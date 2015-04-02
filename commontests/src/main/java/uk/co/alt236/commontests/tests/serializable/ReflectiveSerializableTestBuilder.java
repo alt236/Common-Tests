@@ -1,12 +1,8 @@
 package uk.co.alt236.commontests.tests.serializable;
 
-import android.content.Context;
-
 import junit.framework.TestSuite;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import uk.co.alt236.commontests.util.SerializationUtils;
@@ -22,28 +18,9 @@ public class ReflectiveSerializableTestBuilder extends AbstractReflectiveTestCas
         super(classFilter);
     }
 
-    private List<Class<?>> getAllRelevantClasses(Context context) {
-        final Collection<String> classes = getClassNames();
-        final List<Class<?>> methodResult = new ArrayList<Class<?>>();
-
-        for (final String clazzName : classes) {
-            final Class<?> clazz;
-            try {
-                clazz = Class.forName(clazzName);
-                if (isApplicable(clazz)) {
-                    methodResult.add(clazz);
-                }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return methodResult;
-    }
-
-    public TestSuite getTests(final Context context) {
+    public TestSuite getTests() {
         final TestSuite selectedTests = new TestSuite();
-        final List<Class<?>> listOfClasses = getAllRelevantClasses(context);
+        final List<Class<?>> listOfClasses = getApplicableClasses();
 
         for (final Class<?> clazz : listOfClasses) {
             selectedTests.addTest(new ReflectiveSerializableTestCase(clazz));
@@ -52,7 +29,7 @@ public class ReflectiveSerializableTestBuilder extends AbstractReflectiveTestCas
         return selectedTests;
     }
 
-    private static boolean isApplicable(final Class<?> clazz) {
+    protected boolean isApplicable(final Class<?> clazz) {
         if (Modifier.isAbstract(clazz.getModifiers())) {
             return false;
         }

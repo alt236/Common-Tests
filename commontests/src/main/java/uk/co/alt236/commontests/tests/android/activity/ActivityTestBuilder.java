@@ -8,8 +8,6 @@ import android.content.pm.PackageManager;
 import junit.framework.TestSuite;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -22,32 +20,13 @@ import uk.co.alt236.commontests.util.filter.ClassFilter;
  */
 public class ActivityTestBuilder extends AbstractReflectiveTestCaseBuilder {
 
-    public ActivityTestBuilder(final Context context, final ClassFilter classFilter){
+    public ActivityTestBuilder(final ClassFilter classFilter){
         super(classFilter);
-    }
-
-    private List<Class<?>> getAllRelevantClasses(Context context) {
-        final Collection<String> classes = getClassNames();
-        final List<Class<?>> methodResult = new ArrayList<Class<?>>();
-
-        for (final String clazzName : classes) {
-            final Class<?> clazz;
-            try {
-                clazz = Class.forName(clazzName);
-                if (isApplicable(clazz)) {
-                    methodResult.add(clazz);
-                }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return methodResult;
     }
 
     public TestSuite getTests(final Context context) throws Exception{
         final TestSuite selectedTests = new TestSuite();
-        final List<Class<?>> listOfClasses = getAllRelevantClasses(context);
+        final List<Class<?>> listOfClasses = getApplicableClasses();
         final Set<String> manifestActivities = getAllManifestActivities(context, context.getPackageName());
 
         for (final Class<?> clazz : listOfClasses) {
@@ -75,7 +54,7 @@ public class ActivityTestBuilder extends AbstractReflectiveTestCaseBuilder {
         return result;
     }
 
-    private static boolean isActivity(Class<?> clazz){
+    private boolean isActivity(Class<?> clazz){
         final boolean res;
 
         if (clazz == null) {
@@ -91,7 +70,7 @@ public class ActivityTestBuilder extends AbstractReflectiveTestCaseBuilder {
         return res;
     }
 
-    private static boolean isApplicable(Class<?> clazz) {
+    protected boolean isApplicable(Class<?> clazz) {
         return !Modifier.isAbstract(clazz.getModifiers()) && isActivity(clazz);
     }
 }
