@@ -3,6 +3,7 @@ package uk.co.alt236.commontests.tests.serializable;
 import junit.framework.TestSuite;
 
 import java.util.List;
+import java.util.Set;
 
 import uk.co.alt236.commontests.util.SerializationUtils;
 import uk.co.alt236.commontests.util.base.AbstractReflectiveTestCaseBuilder;
@@ -17,12 +18,12 @@ public class SerializableFieldTestBuilder extends AbstractReflectiveTestCaseBuil
         super(classFilter);
     }
 
-    public TestSuite getTests() {
+    public TestSuite getTests(final Set<String> exceptions) {
         final TestSuite selectedTests = new TestSuite();
         final List<Class<?>> listOfClasses = getApplicableClasses();
 
         for (final Class<?> clazz : listOfClasses) {
-            selectedTests.addTest(new SerializableFieldTestCase(clazz));
+            selectedTests.addTest(new SerializableFieldTestCase(clazz, exceptions));
         }
 
         return selectedTests;

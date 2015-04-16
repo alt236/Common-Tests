@@ -13,12 +13,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import uk.co.alt236.commontests.util.base.AbstractReflectiveTestCaseBuilder;
+import uk.co.alt236.commontests.util.base.FilteredTestCaseBuilder;
 import uk.co.alt236.commontests.util.filter.ClassFilter;
 
 /**
  * Created by alexandros on 31/03/2015.
  */
-public class ActivityTestBuilder extends AbstractReflectiveTestCaseBuilder {
+public class ActivityTestBuilder extends FilteredTestCaseBuilder {
 
     public ActivityTestBuilder(final ClassFilter classFilter){
         super(classFilter);
@@ -26,15 +27,12 @@ public class ActivityTestBuilder extends AbstractReflectiveTestCaseBuilder {
 
     public TestSuite getTests(final Context context) {
         final TestSuite selectedTests = new TestSuite();
-        final List<Class<?>> listOfClasses = getApplicableClasses();
         final Set<String> manifestActivities = getAllManifestActivities(context, context.getPackageName());
 
-        for (final Class<?> clazz : listOfClasses) {
-            selectedTests.addTest(new ActivityInManifestTest(clazz, manifestActivities));
-        }
+        selectedTests.addTest(new ActivityInCodeButNotInManifestTest(getFilteredClassNames(), manifestActivities));
 
         for(final String clazz : manifestActivities){
-            selectedTests.addTest(new ActivityInCode(clazz));
+            selectedTests.addTest(new ActivityInManifestButNotInCodeTest(clazz));
         }
 
         return selectedTests;

@@ -1,15 +1,15 @@
 package uk.co.alt236.commontests.tests.android.activity;
 
-import uk.co.alt236.commontests.util.base.AbstractReflectiveTestCase;
+import android.test.AndroidTestCase;
 
 /**
  * Created by alexandros on 31/03/2015.
  */
-public class ActivityInCode extends AbstractReflectiveTestCase {
+public class ActivityInManifestButNotInCodeTest extends AndroidTestCase {
 
     private final String activityName;
 
-    protected ActivityInCode(final String activityName) {
+    protected ActivityInManifestButNotInCodeTest(final String activityName) {
         setName("testReflectively");
         this.activityName = activityName;
     }
